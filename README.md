@@ -1,5 +1,3 @@
-
-
 # Mysterium Hunt
 
 Mysterium Hunt is an immersive augmented reality (AR) game that takes players on an adventurous treasure hunt. Dive into a world of hidden mysteries and discover treasures in your surroundings. Developed with Flutter, Mysterium Hunt blends physical and digital worlds, providing a unique gaming experience.
@@ -22,6 +20,10 @@ Mysterium Hunt is an immersive augmented reality (AR) game that takes players on
 - **Interactive Gameplay**: Interact with virtual objects seamlessly integrated into the real world.
 - **Engaging Storyline**: Follow a captivating storyline filled with mysteries and adventures.
 - **User-Friendly Interface**: Enjoy a smooth and intuitive user experience.
+
+## Download Link 
+
+https://tsfr.io/join/wcf8tw
 
 ## Installation
 
@@ -57,12 +59,12 @@ Mysterium Hunt is an immersive augmented reality (AR) game that takes players on
 
 ## Screenshots
 
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-04-935_com.example.argame.jpg)
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-10-149_com.example.argame.jpg)
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-15-972_com.example.argame.jpg)
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-22-147_com.example.argame.jpg)
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-29-514_com.example.argame.jpg)
-![Screenshot](assets/images/Screenshot_2024-08-08-18-25-32-423_com.example.argame.jpg)
+<img src="assets/images/Screenshot_2024-08-08-18-25-04-935_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
+<img src="assets/images/Screenshot_2024-08-08-18-25-10-149_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
+<img src="assets/images/Screenshot_2024-08-08-18-25-15-972_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
+<img src="assets/images/Screenshot_2024-08-08-18-25-22-147_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
+<img src="assets/images/Screenshot_2024-08-08-18-25-29-514_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
+<img src="assets/images/Screenshot_2024-08-08-18-25-32-423_com.example.argame.jpg" alt="Screenshot" width="300" height="600">
 
 ## Technologies Used
 
@@ -105,7 +107,3 @@ Slack ID | Email
 @Bigfidelis | [bigfidelisx@gmail.com](mailto:bigfidelisx@gmail.com)
 @Shalom | [roselineoladiran97@gmail.com](mailto:roselineoladiran97@gmail.com)
 @prodigy_rejoice | [omotunwaserejoice@gmail.com](mailto:omotunwaserejoice@gmail.com)
-
----
-
-This version is streamlined and focused on the core aspects of the project.
