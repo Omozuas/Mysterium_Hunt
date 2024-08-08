@@ -14,45 +14,21 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   ArCoreController? arCoreController;
   AudioPlayer audioPlayer = AudioPlayer();
   int score = 0;
-
-  List<Map<String, dynamic>> cubes = [
+  List<Map<String, dynamic>> treasures = [
     {
-      "name": "Cube1",
-      "position": vector.Vector3(-0.5, 0.5, -3.5),
-      "color": Colors.black
+      'position': vector.Vector3(0, 0, -1),
+      'collected': false,
+      'clue': 'Find the treasure in front of you!'
     },
     {
-      "name": "Cube2",
-      "position": vector.Vector3(0.5, -0.5, -4.0),
-      "color": Colors.red
+      'position': vector.Vector3(1, 0, -2),
+      'collected': false,
+      'clue': 'Look to your right for the next treasure!'
     },
     {
-      "name": "Cube3",
-      "position": vector.Vector3(-1.0, -0.5, -2.5),
-      "color": Colors.green
-    },
-    {
-      "name": "Cube4",
-      "position": vector.Vector3(1.0, 1.0, -3.0),
-      "color": Colors.yellow
-    },
-  ];
-
-  List<Map<String, dynamic>> cylinders = [
-    {
-      "name": "Cylinder1",
-      "position": vector.Vector3(0.0, -0.5, -2.0),
-      "color": Colors.blue
-    },
-    {
-      "name": "Cylinder2",
-      "position": vector.Vector3(0.5, 0.0, -3.0),
-      "color": Colors.purple
-    },
-    {
-      "name": "Cylinder3",
-      "position": vector.Vector3(-1.5, 0.5, -4.0),
-      "color": Colors.orange
+      'position': vector.Vector3(-1, 0, -2),
+      'collected': false,
+      'clue': 'Look to your left for another treasure!'
     },
   ];
 
@@ -85,6 +61,11 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
                   'Score: $score',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
+                SizedBox(height: 10),
+                Text(
+                  'Clue: ${getCurrentClue()}',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -96,78 +77,47 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
     arCoreController?.onNodeTap = (name) => _onTap(name);
-    _addObjects();
+    _addTreasures();
   }
 
-  void _addObjects() {
-    for (var cube in cubes) {
-      _addCube(cube);
+  void _addTreasures() {
+    for (var i = 0; i < treasures.length; i++) {
+      final material = ArCoreMaterial(
+        color: Colors.yellow,
+        metallic: 1.0,
+      );
+
+      final sphere = ArCoreSphere(
+        materials: [material],
+        radius: 0.1,
+      );
+
+      final node = ArCoreNode(
+        shape: sphere,
+        position: treasures[i]['position'],
+        name: 'treasure_$i',
+      );
+
+      arCoreController?.addArCoreNode(node);
     }
-    for (var cylinder in cylinders) {
-      _addCylinder(cylinder);
+  }
+
+  String getCurrentClue() {
+    for (var treasure in treasures) {
+      if (!treasure['collected']) {
+        return treasure['clue'];
+      }
     }
-  }
-
-  void _addCube(Map<String, dynamic> cube) {
-    final material = ArCoreMaterial(
-      color: cube['color'],
-      metallic: 1.0,
-    );
-
-    final cubeShape = ArCoreCube(
-      size: vector.Vector3(0.5, 0.5, 0.5),
-      materials: [material],
-    );
-
-    final node = ArCoreNode(
-      shape: cubeShape,
-      position: cube['position'],
-      name: cube['name'],
-    );
-
-    arCoreController?.addArCoreNode(node);
-  }
-
-  void _addCylinder(Map<String, dynamic> cylinder) {
-    final material = ArCoreMaterial(
-      color: cylinder['color'],
-      metallic: 1.0,
-    );
-
-    final cylinderShape = ArCoreCylinder(
-      radius: 0.3,
-      height: 0.5,
-      materials: [material],
-    );
-
-    final node = ArCoreNode(
-      shape: cylinderShape,
-      position: cylinder['position'],
-      name: cylinder['name'],
-    );
-
-    arCoreController?.addArCoreNode(node);
+    return 'All treasures collected!';
   }
 
   void _onTap(String name) {
     setState(() {
-      final cubeIndex = cubes.indexWhere((cube) => cube['name'] == name);
-      final cylinderIndex =
-          cylinders.indexWhere((cylinder) => cylinder['name'] == name);
-
-      if (cubeIndex != -1 && !cubes[cubeIndex]['collected']) {
-        cubes[cubeIndex]['collected'] = true;
+      final index = int.parse(name.split('_')[1]);
+      if (!treasures[index]['collected']) {
+        treasures[index]['collected'] = true;
         score += 1;
         _playSound();
-
-        arCoreController?.removeNode(nodeName: name);
-      } else if (cylinderIndex != -1 &&
-          !cylinders[cylinderIndex]['collected']) {
-        cylinders[cylinderIndex]['collected'] = true;
-        score += 1;
-        _playSound();
-
-        arCoreController?.removeNode(nodeName: name);
       }
     });
   }
