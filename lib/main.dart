@@ -1,5 +1,6 @@
 
 import 'package:argame/Ar_Services/arScreen.dart';
+import 'package:argame/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
 
       debugShowCheckedModeBanner: false,
-      home: Arscreen(),
+      home: SplashScreen(),
     );
   }
 }
