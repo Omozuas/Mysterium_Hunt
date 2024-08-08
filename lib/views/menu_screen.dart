@@ -1,3 +1,4 @@
+import 'package:argame/Ar_Services/arScreen.dart';
 import 'package:argame/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,13 @@ class MenuScreen extends StatelessWidget {
                       SizedBox(
                         width: 150, // Adjust the width
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TreasureHuntScreen()));
+                          },
                           child: LevelCard(
                             imagePath: 'assets/images/level 4.jpg',
                             title: 'Level 1',
