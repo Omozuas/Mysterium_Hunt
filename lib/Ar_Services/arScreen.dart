@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:vector_math/vector_math_64.dart' as vector64;
 
 class Arscreen extends StatefulWidget {
@@ -15,54 +18,22 @@ class _ArscreenState extends State<Arscreen> {
   String? objectedSelected;
   List<ArCoreNode> nodes1 = [];
   ArCoreNode? cylinderNode;
+  Timer? updateTimer;
+  double rotationAngle = 0.0;
+  // ArCoreNode? earthNode;
+
   onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
-    arCoreController?.onNodeTap = (name) => onTapHandler(name);
-    arCoreController?.enablePlaneRenderer;
-    arCoreController?.onPlaneTap = _handelOnPlanrTap;
-// arCoreController?.addArCoreNodeWithAnchor(name)=
+    arCoreController?.onNodeTap = (String name) => onItemTapped(name);
+
     displayCube(arCoreController!);
     displayCylinde(arCoreController!);
-    displayEarth(arCoreController!);
-  }
+    displayImage(arCoreController!);
+    // displayEarth(arCoreController!);
 
-// to add image wen taped on screen
-  addBoxNode(ArCoreHitTestResult plane) {
-    final BoxNode = ArCoreReferenceNode(
-        name: "Box",
-        objectUrl:
-            "https://firebasestorage.googleapis.com/v0/b/my-3d-models-8417c.appspot.com/o/puss_in_boots_pocket_shrek.glb?alt=media&token=12d65f53-155d-4bfa-8efe-3d09a48f8eaa",
-        position: plane.pose.translation,
-        rotation: plane.pose.rotation,
-        scale: plane.pose.translation.xyz);
-    nodes1.add(BoxNode);
-    arCoreController?.addArCoreNode(BoxNode);
-  }
-
-  _handelOnPlanrTap(List<ArCoreHitTestResult> hits) {
-    final hit = hits.first;
-    addBoxNode(hit);
-  }
-
-  onTapHandler(String name) {
-    print('Flutter: onNodeTap');
-    showDialog(
-        context: context,
-        builder: (BuildContext builder) {
-          return AlertDialog(
-            content: Row(
-              children: <Widget>[
-                Text("Renmove $name"),
-                IconButton(
-                    onPressed: () {
-                      arCoreController?.removeNode(nodeName: name);
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.delete))
-              ],
-            ),
-          );
-        });
+    // Start periodic updates
+    updateTimer =
+        Timer.periodic(Duration(milliseconds: 100), (timer) => onUpdate());
   }
 
   displayCube(ArCoreController controller) {
@@ -73,10 +44,11 @@ class _ArscreenState extends State<Arscreen> {
     final cube = ArCoreCube(
         size: vector64.Vector3(0.5, 0.5, 0.5), materials: [materials]);
 
-    final node =
-        ArCoreNode(shape: cube, position: vector64.Vector3(-0.5, 0.5, -3.5));
+    final node = ArCoreNode(
+        shape: cube, position: vector64.Vector3(-0.5, 0.5, -3.5), name: "cube");
 
     arCoreController!.addArCoreNode(node);
+    nodes1.add(node);
   }
 
   displayCylinde(ArCoreController controller) {
@@ -94,70 +66,129 @@ class _ArscreenState extends State<Arscreen> {
     );
 
     arCoreController!.addArCoreNode(cylinderNode!);
+    nodes1.add(cylinderNode!);
   }
 
-  displayEarth(ArCoreController controller) async {
+  void displayImage(ArCoreController controller) async {
+    // Load image bytes
+    final ByteData imageData =
+        await rootBundle.load('assets/images/spider_two.png');
+    final Uint8List bytes = imageData.buffer.asUint8List();
+
+    // Create ArCoreImage
+    final arCoreImage = ArCoreImage(
+      bytes: bytes,
+      width: 512,
+      height: 512,
+    );
+
+    // Create ArCoreNode with ArCoreImage
+    final node = ArCoreNode(
+      image: arCoreImage,
+      position: vector64.Vector3(1.0, 0.0, -2.5),
+      name: 'imageNode',
+    );
+
+    arCoreController!.addArCoreNode(node);
+    nodes1.add(node);
+  }
+
+  void displayEarth(ArCoreController controller) async {
     final ByteData imageByte = await rootBundle.load('assets/images/eath.jpg');
 
     final materials = ArCoreMaterial(
         color: Colors.white, textureBytes: imageByte.buffer.asUint8List());
-    final sphere = ArCoreSphere(materials: [materials]);
+    final sphere = ArCoreSphere(
+      materials: [materials],
+      radius: 0.25, // Reduced size
+    );
 
-    final node =
-        ArCoreNode(shape: sphere, position: vector64.Vector3(0, 0, -1.5));
+    final node = ArCoreNode(
+      shape: sphere,
+      position: vector64.Vector3(-0.5, 0.5, -1.0), // Changed position
+      name: 'earthNode',
+    );
 
     arCoreController!.addArCoreNode(node);
+    nodes1.add(node);
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {
-    if (cylinderNode != null) {
-      // Access the current position
-      final currentPosition = cylinderNode!.position!.value;
+  void displayAugmentedImage(ArCoreController controller) async {
+    // Fetch image from the internet
+    final response = await http.get(Uri.parse(
+        "https://firebasestorage.googleapis.com/v0/b/my-3d-models-8417c.appspot.com/o/captain.png?alt=media&token=e172faae-78fb-4b4a-aad5-3519f5b4c85d"));
+    if (response.statusCode == 200) {
+      final bytesImage = response.bodyBytes;
 
-      // Calculate new position
-      final newPosition = vector64.Vector3(
-        currentPosition.x + details.delta.dx * 0.01,
-        currentPosition.y + details.delta.dy * -0.01,
-        currentPosition.z,
-      );
-
-      // Remove old node
-      arCoreController?.removeNode(nodeName: cylinderNode!.name);
-      final materials = ArCoreMaterial(
-        color: Colors.blue,
-        reflectance: 2,
-      );
-      final cylinder = ArCoreCylinder(
-        height: 0.4,
-        radius: 0.5,
-        materials: [materials],
-      );
-      // Add new node with updated position
-      cylinderNode = ArCoreNode(
-        shape: cylinder,
-        position: newPosition,
-        name: 'cylinderNode',
+      // Create ArCoreImage
+      final arCoreImage = ArCoreImage(
+        bytes: bytesImage,
+        width: 100,
+        height: 100,
       );
 
-      arCoreController?.addArCoreNode(cylinderNode!);
+      // Create ArCoreNode with ArCoreImage
+      final node = ArCoreNode(
+        image: arCoreImage,
+        position: vector64.Vector3(0.5, 0, 0),
+        name: 'augmentedImageNode',
+      );
+
+      arCoreController!.addArCoreNode(node);
+      nodes1.add(node);
+    } else {
+      print('Failed to load image from the internet');
     }
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    arCoreController?.dispose();
+  double calculateDistance(vector64.Vector3 position) {
+    return position.length;
+  }
+
+  void onUpdate() {
+    if (arCoreController == null) return;
+
+    // Update the size of the nodes based on their distance to the camera
+    for (var node in nodes1) {
+      final distance = calculateDistance(node.position!.value);
+      final scale = 1.0 / (distance + 1.0); // Adjust scaling factor as needed
+
+      // Remove and recreate the node with the updated scale
+      arCoreController?.removeNode(nodeName: node.name);
+      final updatedNode = ArCoreNode(
+        shape: node.shape,
+        position: node.position!.value,
+        scale: vector64.Vector3.all(scale),
+        name: node.name,
+      );
+      arCoreController?.addArCoreNode(updatedNode);
+    }
+  }
+
+  void onItemTapped(String name) {
+    // Find the node by name and remove it
+    final node = findNodeByName(name);
+    if (node != null) {
+      arCoreController?.removeNode(nodeName: node.name);
+      nodes1.remove(node);
+    }
+  }
+
+  ArCoreNode? findNodeByName(String name) {
+    try {
+      return nodes1.firstWhere((node) => node.name == name);
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-          onPanUpdate: _onPanUpdate,
-          child: ArCoreView(
-              enableUpdateListener: true,
-              onArCoreViewCreated: onArCoreViewCreated)),
+      body: ArCoreView(
+          enableTapRecognizer: true,
+          enableUpdateListener: true,
+          onArCoreViewCreated: onArCoreViewCreated),
     );
   }
 }
