@@ -1,39 +1,82 @@
-import 'package:argame/Ar_Services/arScreen.dart';
-import 'package:argame/profile_screen.dart';
+import 'dart:async';
+
+import 'package:argame/views/auth/log_in_screen.dart';
 import 'package:argame/views/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+
+    // Initialize the animation controller
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Create a fade-in animation
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+
+    // Start the animation
+    _controller.forward();
+
+    // Navigate to home screen after 2 seconds
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LogInScreen()));
+    });
   }
 
-  _navigateToHome() async {
-    await Future.delayed(Duration(seconds: 3), () {});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF010B1B),
-      body: Center(
-        child: CircleAvatar(
-          radius: 50,
-          backgroundImage: AssetImage('assets/images/splash.png'),
-        ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: const BoxDecoration(color: Colors.blue),
+          ),
+          Center(
+            child: FadeTransition(
+              opacity: _animation,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min, // Prevents overflow
+                children: [
+                  Text(
+                    'AR Treasure Hunt',
+                    style: TextStyle(
+                      fontSize: 50.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
