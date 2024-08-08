@@ -1,20 +1,20 @@
-
-import 'package:argame/Ar_Services/arScreen.dart';
-import 'package:argame/views/home_screen.dart';
+import 'package:argame/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MysteriousHunt());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MysteriousHunt extends StatelessWidget {
+  const MysteriousHunt({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       home: SplashScreen(),
     );
   }
