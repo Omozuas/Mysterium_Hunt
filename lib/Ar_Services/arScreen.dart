@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
@@ -64,10 +65,11 @@ class _ArscreenState extends State<Arscreen> {
     );
     final cylinder =
         ArCoreCylinder(height: 0.4, radius: 0.5, materials: [materials]);
-
+    // Get a random position
+    final randomPosition = getRandomPosition();
     cylinderNode = ArCoreNode(
       shape: cylinder,
-      position: vector64.Vector3(0.0, -0.5, -2.0),
+      position: randomPosition,
       name: 'cylinderNode',
     );
 
@@ -204,6 +206,15 @@ class _ArscreenState extends State<Arscreen> {
     } catch (e) {
       return null;
     }
+  }
+
+  vector64.Vector3 getRandomPosition() {
+    final random = Random();
+    return vector64.Vector3(
+      random.nextDouble() * 4 - 2, // Random x between -2 and 2
+      random.nextDouble() * 2 - 1, // Random y between -1 and 1
+      random.nextDouble() * -3 - 1, // Random z between -1 and -4
+    );
   }
 
   @override
