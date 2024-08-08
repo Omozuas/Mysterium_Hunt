@@ -39,107 +39,109 @@ class SignUpScreen extends StatelessWidget {
       backgroundColor: Color(0xffFFFFFF),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Text(
-                'Sign Up!',
-                style: GoogleFonts.inter(
-                    fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Fill in the details correctly to register an account successfully',
-              style: GoogleFonts.syne(
-                  fontSize: 18,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w400),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Username',
-              style: GoogleFonts.syne(
-                  color: const Color(0xff565050),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
-            ),
-            buildTextField(
-                type: TextInputType.text, hintText: 'prodigy_rejoice'),
-            SizedBox(height: 10),
-            Text(
-              'Email',
-              style: GoogleFonts.syne(
-                  color: const Color(0xff565050),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
-            ),
-            buildTextField(
-                type: TextInputType.emailAddress,
-                hintText: 'prodigy@gmail.com'),
-            SizedBox(height: 10),
-            Text(
-              'Password',
-              style: GoogleFonts.syne(
-                  color: const Color(0xff565050),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
-            ),
-            const PasswordField(hintText: 'Enter Password'),
-            SizedBox(height: 10),
-            Text(
-              'Confirm Password',
-              style: GoogleFonts.syne(
-                  color: const Color(0xff565050),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
-            ),
-            const PasswordField(hintText: 'Enter Password'),
-            SizedBox(height: 40),
-            FullButton(
-              text: 'Create Account',
-              width: double.infinity,
-              height: 44,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SignUpFeedbackScreen()));
-              },
-              color: Colors.white,
-            ),
-            SizedBox(height: 15),
-            Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Already have a account? ',
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xff737380))),
-                    TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LogInScreen())),
-                      text: 'Login',
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: const Color(0xffEC8305)),
-                    ),
-                  ],
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Text(
+                  'Sign Up!',
+                  style: GoogleFonts.inter(
+                      fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Text(
+                'Fill in the details correctly to register an account successfully',
+                style: GoogleFonts.syne(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Username',
+                style: GoogleFonts.syne(
+                    color: const Color(0xff565050),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
+              buildTextField(
+                  type: TextInputType.text, hintText: 'prodigy_rejoice'),
+              SizedBox(height: 10),
+              Text(
+                'Email',
+                style: GoogleFonts.syne(
+                    color: const Color(0xff565050),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
+              buildTextField(
+                  type: TextInputType.emailAddress,
+                  hintText: 'prodigy@gmail.com'),
+              SizedBox(height: 10),
+              Text(
+                'Password',
+                style: GoogleFonts.syne(
+                    color: const Color(0xff565050),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
+              const PasswordField(hintText: 'Enter Password'),
+              SizedBox(height: 10),
+              Text(
+                'Confirm Password',
+                style: GoogleFonts.syne(
+                    color: const Color(0xff565050),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
+              const PasswordField(hintText: 'Enter Password'),
+              SizedBox(height: 40),
+              FullButton(
+                text: 'Create Account',
+                width: double.infinity,
+                height: 44,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignUpFeedbackScreen()));
+                },
+                color: Colors.white,
+              ),
+              SizedBox(height: 15),
+              Center(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: 'Already have a account? ',
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xff737380))),
+                      TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LogInScreen())),
+                        text: 'Login',
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: const Color(0xffEC8305)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
