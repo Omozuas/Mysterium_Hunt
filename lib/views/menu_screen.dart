@@ -1,3 +1,4 @@
+import 'package:argame/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -28,10 +29,18 @@ class MenuScreen extends StatelessWidget {
                           width: 100, // Adjust the width as needed
                           height: 100, // Adjust the height as needed
                         ),
-                        const CircleAvatar(
-                          radius: 30, // Adjust the size of the CircleAvatar
-                          backgroundImage:
-                              AssetImage('assets/images/penguin player.jpg'), // Replace with your image path
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileScreen()));
+                          },
+                          child: const CircleAvatar(
+                            radius: 30, // Adjust the size of the CircleAvatar
+                            backgroundImage: AssetImage(
+                                'assets/images/penguin player.jpg'), // Replace with your image path
+                          ),
                         ),
                       ],
                     ),
@@ -39,12 +48,15 @@ class MenuScreen extends StatelessWidget {
                   // Centered LevelCards
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 150, // Adjust the width
-                        child: LevelCard(
-                          imagePath: 'assets/images/level 4.jpg',
-                          title: 'Level 1',
+                        child: InkWell(
+                          onTap: () {},
+                          child: LevelCard(
+                            imagePath: 'assets/images/level 4.jpg',
+                            title: 'Level 1',
+                          ),
                         ),
                       ),
                     ],
@@ -103,7 +115,8 @@ class LevelCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(4.0)),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(4.0)),
             child: Image.asset(
               imagePath,
               fit: BoxFit.cover,
