@@ -20,7 +20,13 @@ class _ArscreenState extends State<Arscreen> {
   ArCoreNode? cylinderNode;
   Timer? updateTimer;
   double rotationAngle = 0.0;
-  // ArCoreNode? earthNode;
+  final double distanceThreshold = 1.5; // Threshold distance for indicator
+  @override
+  void dispose() {
+    updateTimer?.cancel();
+    arCoreController?.dispose();
+    super.dispose();
+  }
 
   onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
@@ -153,6 +159,9 @@ class _ArscreenState extends State<Arscreen> {
       final distance = calculateDistance(node.position!.value);
       final scale = 1.0 / (distance + 1.0); // Adjust scaling factor as needed
 
+      // Determine if the node is within the threshold distance
+      final isClose = distance < distanceThreshold;
+
       // Remove and recreate the node with the updated scale
       arCoreController?.removeNode(nodeName: node.name);
       final updatedNode = ArCoreNode(
@@ -160,9 +169,24 @@ class _ArscreenState extends State<Arscreen> {
         position: node.position!.value,
         scale: vector64.Vector3.all(scale),
         name: node.name,
+        children: isClose ? _createIndicatorNode(node.name) : [],
       );
       arCoreController?.addArCoreNode(updatedNode);
     }
+  }
+
+  List<ArCoreNode> _createIndicatorNode(String? parentName) {
+    final indicatorMaterial = ArCoreMaterial(
+      color: Colors.green,
+    );
+    final indicatorSphere =
+        ArCoreSphere(radius: 0.05, materials: [indicatorMaterial]);
+    final indicatorNode = ArCoreNode(
+      shape: indicatorSphere,
+      position: vector64.Vector3(0, 0.3, 0), // Position above the parent node
+      name: 'indicator_$parentName',
+    );
+    return [indicatorNode];
   }
 
   void onItemTapped(String name) {
