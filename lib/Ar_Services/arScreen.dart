@@ -211,9 +211,13 @@ class _ArscreenState extends State<Arscreen> {
   vector64.Vector3 getRandomPosition() {
     final random = Random();
     return vector64.Vector3(
-      random.nextDouble() * 4 - 2, // Random x between -2 and 2
-      random.nextDouble() * 2 - 1, // Random y between -1 and 1
-      random.nextDouble() * -3 - 1, // Random z between -1 and -4
+      random.nextDouble() * 2 -
+          1, // Random x between -1 and 1 (more controlled range)
+      random.nextDouble() * 1.5 -
+          0.5, // Random y between -0.5 and 1 (keeping objects within reach)
+      -1 *
+          (random.nextDouble() * 2 +
+              1), // Random z between -1 and -3 (objects in front of the user)
     );
   }
 
