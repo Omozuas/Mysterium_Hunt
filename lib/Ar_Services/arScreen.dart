@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -16,22 +17,15 @@ class Arscreen extends StatefulWidget {
 
 class _ArscreenState extends State<Arscreen> {
   ArCoreController? arCoreController;
-  String? objectedSelected;
   List<ArCoreNode> nodes1 = [];
-  ArCoreNode? cylinderNode;
   Timer? updateTimer;
   double rotationAngle = 0.0;
   final double distanceThreshold = 1.5; // Threshold distance for indicator
-  @override
-  void dispose() {
-    updateTimer?.cancel();
-    arCoreController?.dispose();
-    super.dispose();
-  }
+  AudioPlayer audioPlayer = AudioPlayer();
 
   onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
-    arCoreController?.onNodeTap = (String name) => onItemTapped(name);
+    arCoreController!.onNodeTap = (String name) => onItemTapped(name);
 
     displayCube(arCoreController!);
     displayCylinde(arCoreController!);
@@ -67,14 +61,14 @@ class _ArscreenState extends State<Arscreen> {
         ArCoreCylinder(height: 0.4, radius: 0.5, materials: [materials]);
     // Get a random position
     final randomPosition = getRandomPosition();
-    cylinderNode = ArCoreNode(
+    final node = ArCoreNode(
       shape: cylinder,
       position: randomPosition,
       name: 'cylinderNode',
     );
 
-    arCoreController!.addArCoreNode(cylinderNode!);
-    nodes1.add(cylinderNode!);
+    arCoreController!.addArCoreNode(node);
+    nodes1.add(node);
   }
 
   void displayImage(ArCoreController controller) async {
@@ -195,7 +189,7 @@ class _ArscreenState extends State<Arscreen> {
     // Find the node by name and remove it
     final node = findNodeByName(name);
     if (node != null) {
-      arCoreController?.removeNode(nodeName: node.name);
+      arCoreController!.removeNode(nodeName: node.name);
       nodes1.remove(node);
     }
   }
@@ -222,6 +216,14 @@ class _ArscreenState extends State<Arscreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    updateTimer?.cancel();
+    arCoreController?.dispose();
+    audioPlayer.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ArCoreView(
@@ -229,5 +231,10 @@ class _ArscreenState extends State<Arscreen> {
           enableUpdateListener: true,
           onArCoreViewCreated: onArCoreViewCreated),
     );
+  }
+
+  void _playSound() async {
+    await audioPlayer.play(
+        AssetSource('assets/audio/DXE9BCY-vibrant-game-game-touch-2.mp3'));
   }
 }
