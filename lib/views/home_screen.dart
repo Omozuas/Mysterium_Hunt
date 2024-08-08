@@ -1,3 +1,4 @@
+import 'package:argame/views/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // Navigate to home screen after 2 seconds
     Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MenuScreen()));
     });
   }
 
