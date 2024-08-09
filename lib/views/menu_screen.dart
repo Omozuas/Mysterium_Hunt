@@ -71,12 +71,23 @@ class MenuScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 150, // Adjust the width
-                        child: LevelCard(
-                          imagePath: 'assets/images/level 1.jpg',
-                          title: 'Level 2',
+                        child: GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Coming soon...Level 1 available'),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: LevelCard(
+                            imagePath: 'assets/images/level 1.jpg',
+                            title: 'Level 2',
+                          ),
                         ),
                       ),
                     ],
@@ -84,12 +95,23 @@ class MenuScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 150, // Adjust the width
-                        child: LevelCard(
-                          imagePath: 'assets/images/level 5.jpg',
-                          title: 'Level 3',
+                        child: GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Coming soon...Level 1 available'),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: LevelCard(
+                            imagePath: 'assets/images/level 5.jpg',
+                            title: 'Level 3',
+                          ),
                         ),
                       ),
                     ],
