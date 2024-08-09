@@ -1,3 +1,4 @@
+import 'package:argame/Ar_Services/arScreen.dart';
 import 'package:argame/views/auth/log_in_screen.dart';
 import 'package:argame/widgets/custom_full_button.dart';
 import 'package:flutter/material.dart';
@@ -69,8 +70,10 @@ class SignUpFeedbackScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 40,
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LogInScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TreasureHuntScreen()));
                   },
                   color: Colors.white,
                 ),

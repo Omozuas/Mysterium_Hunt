@@ -1,4 +1,5 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
+import 'package:argame/views/menu_screen.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
@@ -179,8 +180,9 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).pop(); // Go back to the menu
+                Navigator.of(context).pop();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MenuScreen()));
               },
               child: Text('Go back to menu'),
             ),
