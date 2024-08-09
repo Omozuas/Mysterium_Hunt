@@ -24,7 +24,7 @@ packages:
       sha256: c05c6147124cd63e725e861335a8b4d57300b80e6e92cea7c145c739223bbaef
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.1"
+    version: "6.0.0"
   audioplayers_android:
     dependency: transitive
     description:
@@ -216,7 +216,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  js:
+  leak_tracker:
     dependency: transitive
     description:
       name: js
