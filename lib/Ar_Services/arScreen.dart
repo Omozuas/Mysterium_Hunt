@@ -158,8 +158,36 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
         treasure['collected'] = true;
         score += 1;
         _playSound();
+
+        arCoreController?.removeNode(nodeName: name);
+
+        if (treasures.every((t) => t['collected'])) {
+          _showCongratulationsDialog();
+        }
+
       }
     });
+  }
+
+  void _showCongratulationsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Congratulations!'),
+          content: Text('You found all the treasures!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Go back to the menu
+              },
+              child: Text('Go back to menu'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _playSound() async {
