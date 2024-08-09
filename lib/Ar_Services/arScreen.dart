@@ -151,16 +151,6 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
     return 'All treasures collected!';
   }
 
-  // void _onTap(String name) {
-  //   setState(() {
-  //     final treasure = treasures.firstWhere((t) => t['name'] == name);
-  //     if (!treasure['collected']) {
-  //       treasure['collected'] = true;
-  //       score += 1;
-  //       _playSound();
-  //     }
-  //   });
-  // }
   void _onTap(String name) {
     setState(() {
       final treasure = treasures.firstWhere((t) => t['name'] == name);
@@ -168,9 +158,6 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
         treasure['collected'] = true;
         score += 1;
         _playSound();
-
-        // Remove the node from the AR scene
-        arCoreController?.removeNode(nodeName: name);
       }
     });
   }
