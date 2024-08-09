@@ -1,6 +1,31 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool isPlaying = true;
+
+  void playPauseMusic() async {
+    print('object');
+    if (isPlaying == true) {
+      await audioPlayer.pause(); // Pause the music
+      print('stop');
+    } else {
+      await audioPlayer.play(AssetSource('audio/neon-gaming-128925.mp3'));
+      await audioPlayer.setReleaseMode(ReleaseMode.loop);
+      ; // Resume playing the music
+      print('play');
+    }
+    setState(() {
+      isPlaying = !isPlaying; // Toggle the play/pause state
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +38,16 @@ class ProfileScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      playPauseMusic();
+                    },
+                    child: Icon(isPlaying ? Icons.volume_up : Icons.volume_off),
+                  ),
+                ],
+              ),
               CircleAvatar(
                 radius: 80,
                 backgroundImage: AssetImage('assets/images/iron_man.png'),
@@ -24,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'Level 10',
+                'Level 1',
                 style: TextStyle(fontSize: 18, color: Colors.grey[700]),
               ),
               SizedBox(height: 32),

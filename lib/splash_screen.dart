@@ -91,6 +91,5 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _playSound() async {
     await audioPlayer.play(AssetSource('audio/neon-gaming-128925.mp3'));
-    await audioPlayer.setReleaseMode(ReleaseMode.loop);
   }
 }
