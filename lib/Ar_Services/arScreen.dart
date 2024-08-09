@@ -123,6 +123,7 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   }
 
   void _playSound() async {
-    await audioPlayer.play(AssetSource('audio/collect.mp3'));
+    await audioPlayer
+        .play(AssetSource('audio/DXE9BCY-vibrant-game-game-touch-2.mp3'));
   }
 }
