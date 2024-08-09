@@ -14,23 +14,58 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   ArCoreController? arCoreController;
   AudioPlayer audioPlayer = AudioPlayer();
   int score = 0;
-  List<Map<String, dynamic>> treasures = [
+
+  List<Map<String, dynamic>> cubes = [
     {
-      'position': vector.Vector3(0, 0, -1),
-      'collected': false,
-      'clue': 'Find the treasure in front of you!'
+      "name": "Cube1",
+      "position": vector.Vector3(-0.5, 0.5, -3.5),
+      "color": Colors.black
     },
     {
-      'position': vector.Vector3(1, 0, -2),
-      'collected': false,
-      'clue': 'Look to your right for the next treasure!'
+      "name": "Cube2",
+      "position": vector.Vector3(0.5, -0.5, -4.0),
+      "color": Colors.red
     },
     {
-      'position': vector.Vector3(-1, 0, -2),
-      'collected': false,
-      'clue': 'Look to your left for another treasure!'
+      "name": "Cube3",
+      "position": vector.Vector3(-1.0, -0.5, -2.5),
+      "color": Colors.green
+    },
+    {
+      "name": "Cube4",
+      "position": vector.Vector3(1.0, 1.0, -3.0),
+      "color": Colors.yellow
     },
   ];
+
+  List<Map<String, dynamic>> cylinders = [
+    {
+      "name": "Cylinder1",
+      "position": vector.Vector3(0.0, -0.5, -2.0),
+      "color": Colors.blue
+    },
+    {
+      "name": "Cylinder2",
+      "position": vector.Vector3(0.5, 0.0, -3.0),
+      "color": Colors.purple
+    },
+    {
+      "name": "Cylinder3",
+      "position": vector.Vector3(-1.5, 0.5, -4.0),
+      "color": Colors.orange
+    },
+  ];
+
+  List<Map<String, dynamic>> treasures = [];
+
+  @override
+  void initState() {
+    super.initState();
+    treasures = [...cubes, ...cylinders];
+    for (var treasure in treasures) {
+      treasure['collected'] = false;
+    }
+  }
 
   @override
   void dispose() {
@@ -83,19 +118,24 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   void _addTreasures() {
     for (var i = 0; i < treasures.length; i++) {
       final material = ArCoreMaterial(
-        color: Colors.yellow,
-        metallic: 1.0,
+        color: treasures[i]['color'],
       );
 
-      final sphere = ArCoreSphere(
-        materials: [material],
-        radius: 0.1,
-      );
+      final shape = treasures[i]['name'].startsWith('Cube')
+          ? ArCoreCube(
+              materials: [material],
+              size: vector.Vector3(0.2, 0.2, 0.2),
+            )
+          : ArCoreCylinder(
+              materials: [material],
+              radius: 0.1,
+              height: 0.2,
+            );
 
       final node = ArCoreNode(
-        shape: sphere,
+        shape: shape,
         position: treasures[i]['position'],
-        name: 'treasure_$i',
+        name: treasures[i]['name'],
       );
 
       arCoreController?.addArCoreNode(node);
@@ -105,7 +145,7 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
   String getCurrentClue() {
     for (var treasure in treasures) {
       if (!treasure['collected']) {
-        return treasure['clue'];
+        return 'Find the ${treasure['name']}!';
       }
     }
     return 'All treasures collected!';
@@ -113,9 +153,9 @@ class _TreasureHuntScreenState extends State<TreasureHuntScreen> {
 
   void _onTap(String name) {
     setState(() {
-      final index = int.parse(name.split('_')[1]);
-      if (!treasures[index]['collected']) {
-        treasures[index]['collected'] = true;
+      final treasure = treasures.firstWhere((t) => t['name'] == name);
+      if (!treasure['collected']) {
+        treasure['collected'] = true;
         score += 1;
         _playSound();
       }
