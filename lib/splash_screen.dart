@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:argame/views/auth/log_in_screen.dart';
 import 'package:argame/views/auth/sign_up_screen.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,11 +14,12 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-
+    _playSound();
     // Initialize the animation controller
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
@@ -85,5 +87,10 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ),
     );
+  }
+
+  void _playSound() async {
+    await audioPlayer.play(AssetSource('audio/neon-gaming-128925.mp3'));
+    await audioPlayer.setReleaseMode(ReleaseMode.loop);
   }
 }
